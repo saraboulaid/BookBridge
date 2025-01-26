@@ -6,34 +6,66 @@
 
 <h1>Liste des livres</h1>
 
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row">
+        <!-- Champ de recherche -->
+        <div class="col-md-2">
+            <select name="searchField" class="form-control">
+                <option value="Title">Titre</option>
+                <option value="Author">Auteur</option>
+                <option value="PublicationDate">Date de publication</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Rechercher..." />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+    </div>
+</form>
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row">
+        <!-- Filtre par genre -->
+        <div class="col-md-2">
+            <select name="genreFilter" class="form-control">
+                <option value="">Sélectionner un genre</option>
+                @foreach (var genre in Enum.GetValues(typeof(UserApp.Models.Genre)).Cast<UserApp.Models.Genre>())
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </select>
+        </div>
+
+        <!-- Filtre par disponibilité -->
+        <div class="col-md-2">
+            <select name="availabilityFilter" class="form-control">
+                <option value="">Disponibilité</option>
+                <option value="Disponible">Disponible</option>
+                <option value="Indisponible">Indisponible</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </div>
+    </div>
+</form>
+
 <p>
     <a asp-action="Create">Créer un nouveau livre</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Titre
-            </th>
-            <th>
-                Auteur
-            </th>
-            <th>
-                Genre
-            </th>
-            <th>
-                Date de publication
-            </th>
-            <th>
-                Image
-            </th>
-            <th>
-                Nombre d'exemplaires
-            </th>
-            <th>
-                Nombre d'emprunts
-            </th>
-            <th></th>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Genre</th>
+            <th>Date de publication</th>
+            <th>Image</th>
+            <th>Nombre d'exemplaires</th>
+            <th>Nombre d'emprunts</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>

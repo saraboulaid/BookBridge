@@ -22,9 +22,48 @@ namespace UserApp.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchField, string searchTerm, string genreFilter, string availabilityFilter)
         {
-            return View(await _context.Book.ToListAsync());
+            var books = from b in _context.Book
+                        select b;
+
+            // Recherche
+            if (!string.IsNullOrEmpty(searchTerm) && !string.IsNullOrEmpty(searchField))
+            {
+                switch (searchField)
+                {
+                    case "Title":
+                        books = books.Where(b => b.Title.Contains(searchTerm));
+                        break;
+                    case "Author":
+                        books = books.Where(b => b.Author.Contains(searchTerm));
+                        break;
+                    case "PublicationDate":
+                        if (DateOnly.TryParse(searchTerm, out var searchDate))
+                        {
+                            books = books.Where(b => b.PublicationDate == searchDate);
+                        }
+                        break;
+                }
+            }
+
+            // Filtrage par genre
+            if (!string.IsNullOrEmpty(genreFilter))
+            {
+                books = books.Where(b => b.Genre == Enum.Parse<Genre>(genreFilter));
+            }
+
+            // Filtrage par disponibilité
+            if (availabilityFilter == "Disponible")
+            {
+                books = books.Where(b => b.NumberOfLoans < b.NumberOfCopies);
+            }
+            else if (availabilityFilter == "Indisponible")
+            {
+                books = books.Where(b => b.NumberOfLoans >= b.NumberOfCopies);
+            }
+
+            return View(await books.ToListAsync());
         }
 
         // GET: Books/Details/5
