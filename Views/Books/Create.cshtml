@@ -4,31 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Créer</h1>
 
-<h4>Book</h4>
+<h4>Livre</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
+                <label asp-for="Title" class="control-label">Titre</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author" class="control-label"></label>
+                <label asp-for="Author" class="control-label">Auteur</label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
+                <label asp-for="Genre" class="control-label">Genre</label>
                 <select asp-for="Genre" asp-items="Html.GetEnumSelectList<UserApp.Models.Genre>()" class="form-control"></select>
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PublicationDate" class="control-label"></label>
+                <label asp-for="PublicationDate" class="control-label">Date de publication</label>
                 <input asp-for="PublicationDate" class="form-control" type="date" />
                 <span asp-validation-for="PublicationDate" class="text-danger"></span>
             </div>
@@ -38,7 +38,7 @@
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumberOfCopies" class="control-label"></label>
+                <label asp-for="NumberOfCopies" class="control-label">Nombre d'exemplaires</label>
                 <input asp-for="NumberOfCopies" class="form-control" />
                 <span asp-validation-for="NumberOfCopies" class="text-danger"></span>
             </div>
@@ -46,14 +46,14 @@
                 <input type="hidden" asp-for="NumberOfLoans" value="0" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="créer" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste</a>
 </div>
 
 @section Scripts {

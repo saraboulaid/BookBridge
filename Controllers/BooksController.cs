@@ -103,57 +103,54 @@ namespace UserApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
+                {
+                // Récupérer l'ancien livre
+                var oldBook = await _context.Book.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
+
+                if (imageFile != null)
+                {
+                    // Supprimer l'ancienne image si elle existe
+                    if (!string.IsNullOrEmpty(oldBook.ImagePath))
+                    {
+                        string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, oldBook.ImagePath.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Sauvegarde de la nouvelle image
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+                    book.ImagePath = "/images/" + uniqueFileName;
+                }
+                else
+                {
+                    book.ImagePath = oldBook.ImagePath; // Conserver l'ancienne image si aucune nouvelle n'est fournie
+                }
+                _context.Update(book);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
             {
-                try
+                if (!BookExists(book.Id))
                 {
-                    // Récupérer l'ancien livre
-                    var oldBook = await _context.Book.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
-
-                    if (imageFile != null)
-                    {
-                        // Supprimer l'ancienne image si elle existe
-                        if (!string.IsNullOrEmpty(oldBook.ImagePath))
-                        {
-                            string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, oldBook.ImagePath.TrimStart('/'));
-                            if (System.IO.File.Exists(oldImagePath))
-                            {
-                                System.IO.File.Delete(oldImagePath);
-                            }
-                        }
-
-                        // Sauvegarde de la nouvelle image
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await imageFile.CopyToAsync(fileStream);
-                        }
-                        book.ImagePath = "/images/" + uniqueFileName;
-                    }
-                    else
-                    {
-                        book.ImagePath = oldBook.ImagePath; // Conserver l'ancienne image si aucune nouvelle n'est fournie
-                    }
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!BookExists(book.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
-            return View(book);
+            return RedirectToAction(nameof(Index));
+            
         }
 
         // GET: Books/Delete/5
