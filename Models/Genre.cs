@@ -1,0 +1,34 @@
+﻿namespace UserApp.Models
+{
+    public enum Genre
+    {
+        Fiction,
+        NonFiction,
+        Science,
+        Histoire,
+        Philosophie,
+        Religion,
+        Art,
+        Littérature,
+        Fantastique,
+        ScienceFiction,
+        Policier,
+        Thriller,
+        Romance,
+        Horreur,
+        Biographie,
+        Poésie,
+        Théâtre,
+        Enfants,
+        Jeunesse,
+        BandesDessinees,
+        Education,
+        Voyage,
+        Cuisine,
+        Sante,
+        Sport,
+        Technologie,
+        Nature,
+        DeveloppementPersonnel
+    }
+}

@@ -10,5 +10,7 @@ namespace UserApp.Data
 		{
 
 		}
-	}
+        public DbSet<Book> Book { get; set; } = default!;
+
+    }
 }

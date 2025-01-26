@@ -1,0 +1,16 @@
+# Ignore le dossier Visual Studio
+.vs/
+
+# Ignore les binaires et dossiers générés
+bin/
+obj/
+
+# Ignore les fichiers de logs
+*.log
+
+# Ignore les fichiers temporaires
+*.tmp
+*.user
+*.suo
+*.bak
+*.swp
